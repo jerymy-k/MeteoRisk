@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_MR
+    environment:
+      POSTGRES_USER: meteorisk
+      POSTGRES_PASSWORD: meteorisk_pw
+      POSTGRES_DB: meteorisk_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
