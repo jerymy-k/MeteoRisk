@@ -1,0 +1,19 @@
+# Environment
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+
+# Logs
+*.log
+
+# Raw bronze data (not versioned)
+bronze/
+
+# uv
+.python-version
