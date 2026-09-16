@@ -1,17 +1,12 @@
 [project]
 name = "meteorisk"
 version = "0.1.0"
-description = "End-to-end data pipeline that forecasts
-                weather risk for delivery operations in Moroccan cities. 
-                Built with Airflow (Bronze/Silver/Gold architecture), PostgreSQL,
-                and a Streamlit dashboard. Pulls forecasts from Open-Meteo, computes 
-                a 0-100 Weather Risk Score per city/day, and visualizes high-risk periods 
-                for delivery planning."
+description = "End-to-end data pipeline that forecasts weather risk for delivery operations in Moroccan cities. Built with Airflow (Bronze/Silver/Gold architecture), PostgreSQL, and a Streamlit dashboard. Pulls forecasts from Open-Meteo, computes a 0-100 Weather Risk Score per city/day, and visualizes high-risk periods for delivery planning."
 readme = "README.md"
 authors = [
     { name = "jerymy-k", email = "karimimoha0@gmail.com" }
 ]
-requires-python = ">=3.13"
+requires-python = ">=3.11,<3.12"
 dependencies = [
     "pandas>=3.0.5",
     "plotly>=7.0.0",
@@ -28,3 +23,8 @@ meteorisk = "meteorisk:main"
 [build-system]
 requires = ["uv_build>=0.12.13,<0.13.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+]
