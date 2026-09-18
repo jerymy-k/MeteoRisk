@@ -1,11 +1,16 @@
 import logging
+from pathlib import Path
 import pandas as pd
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+FILE_PATH = PROJECT_ROOT / "transformation" / "clean_city.log"
 
 logging.basicConfig(
     level = logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('transformation/clean_city.log'),
+        logging.FileHandler(FILE_PATH),
         logging.StreamHandler()              
     ]
 )
