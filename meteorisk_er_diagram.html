@@ -120,7 +120,7 @@ mermaid.initialize({
   },
 });
 
-const { svg } = await mermaid.render('erd-svg', \`erDiagram
+const { svg } = await mermaid.render('erd-svg', `erDiagram
   CITIES ||--o{ WEATHER_DATA : has
   WEATHER_DATA ||--|| RISKS : has
   CITIES {
@@ -150,7 +150,7 @@ const { svg } = await mermaid.render('erd-svg', \`erDiagram
     numeric wind_score
     numeric risk_score
     string risk_level
-  }\`);
+  }`);
   
 document.getElementById('erd').innerHTML = svg;
 
@@ -160,7 +160,7 @@ document.querySelectorAll('#erd svg.erDiagram .node').forEach(node => {
   if (!firstPath) return;
   
   const d = firstPath.getAttribute('d');
-  const nums = d.match(/-?[\\d.]+/g)?.map(Number);
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
   if (!nums || nums.length < 8) return;
   
   const xs = [nums[0], nums[2], nums[4], nums[6]];
