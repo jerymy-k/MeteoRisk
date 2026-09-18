@@ -1,30 +1,126 @@
 <style>
-#erd svg.erDiagram .divider path { stroke-opacity: 0.5; }
-#erd svg.erDiagram .row-rect-odd path,
-#erd svg.erDiagram .row-rect-odd rect,
-#erd svg.erDiagram .row-rect-even path,
-#erd svg.erDiagram .row-rect-even rect { stroke: none !important; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  /* 1. Ultra-modern gradient wrapper */
+  .erd-wrapper {
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 8px 32px rgba(15, 23, 42, 0.05);
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  /* Diagram container constraints */
+  #erd {
+    width: 100%;
+    max-width: 1000px;
+  }
+
+  /* 2. Glassmorphism effect and interactions for nodes */
+  #erd svg.erDiagram .node {
+    filter: drop-shadow(0 12px 24px rgba(15, 23, 42, 0.08)) drop-shadow(0 4px 8px rgba(15, 23, 42, 0.04));
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  
+  #erd svg.erDiagram .node:hover {
+    transform: translateY(-6px) scale(1.02);
+    filter: drop-shadow(0 20px 32px rgba(15, 23, 42, 0.12)) drop-shadow(0 8px 16px rgba(15, 23, 42, 0.06));
+  }
+
+  /* 3. Refined relationship lines with flowing animation */
+  #erd svg.erDiagram path.relationshipLine {
+    stroke-width: 2.5px !important;
+    stroke: #6366f1 !important;
+    stroke-dasharray: 8 6;
+    animation: flowLines 20s linear infinite;
+  }
+
+  @keyframes flowLines {
+    from {
+      stroke-dashoffset: 200;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* 4. Elegant internal lines and text */
+  #erd svg.erDiagram .divider path { 
+    stroke-opacity: 0.1; 
+    stroke-width: 1.5px;
+  }
+
+  #erd svg.erDiagram text.entityLabel {
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* Clean row styling */
+  #erd svg.erDiagram .row-rect-odd path,
+  #erd svg.erDiagram .row-rect-odd rect,
+  #erd svg.erDiagram .row-rect-even path,
+  #erd svg.erDiagram .row-rect-even rect { 
+    stroke: none !important; 
+  }
+
+  /* 5. Deep, rich dark mode */
+  @media (prefers-color-scheme: dark) {
+    .erd-wrapper {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); 
+      border-color: rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.02), 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    #erd svg.erDiagram .node {
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.4)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+    #erd svg.erDiagram .node:hover {
+      filter: drop-shadow(0 20px 32px rgba(0, 0, 0, 0.5)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+    }
+    #erd svg.erDiagram path.relationshipLine {
+      stroke: #818cf8 !important;
+    }
+  }
 </style>
-<h2 class="sr-only">Entity relationship diagram: cities, weather_data, and risks tables</h2>
-<div id="erd"></div>
+
+<h2 class="sr-only">Database Schema: MeteoRisk ER Diagram</h2>
+
+<div class="erd-wrapper">
+  <div id="erd"></div>
+</div>
+
 <script type="module">
 import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+
 const themeMode = document.documentElement.dataset.mode;
 const dark = themeMode ? themeMode === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+
 await document.fonts.ready;
+
 mermaid.initialize({
   startOnLoad: false,
   theme: 'base',
-  fontFamily: '"anthropic-sans", sans-serif',
   themeVariables: {
     darkMode: dark,
-    fontSize: '13px',
-    fontFamily: '"anthropic-sans", sans-serif',
-    lineColor: dark ? '#9c9a92' : '#73726c',
-    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    /* Modern typography stack */
+    fontFamily: '"Inter", "-apple-system", "system-ui", sans-serif',
+    fontSize: '14px',
+    /* Indigo and Slate color palette */
+    primaryColor: dark ? '#1e293b' : '#ffffff',         // Table Background
+    primaryBorderColor: dark ? '#334155' : '#cbd5e1',   // Table Border
+    lineColor: dark ? '#818cf8' : '#6366f1',            // Vibrant relationship lines
+    textColor: dark ? '#f8fafc' : '#0f172a',            // High contrast text
+    tertiaryColor: dark ? '#0f172a' : '#f8fafc',        // Alternate row shading
+    mainBkg: dark ? '#1e293b' : '#ffffff',
   },
 });
-const { svg } = await mermaid.render('erd-svg', `erDiagram
+
+const { svg } = await mermaid.render('erd-svg', \`erDiagram
   CITIES ||--o{ WEATHER_DATA : has
   WEATHER_DATA ||--|| RISKS : has
   CITIES {
@@ -54,30 +150,40 @@ const { svg } = await mermaid.render('erd-svg', `erDiagram
     numeric wind_score
     numeric risk_score
     string risk_level
-  }`);
+  }\`);
+  
 document.getElementById('erd').innerHTML = svg;
 
+// SVG replacement script, upgraded for softer corners and thicker borders
 document.querySelectorAll('#erd svg.erDiagram .node').forEach(node => {
   const firstPath = node.querySelector('path[d]');
   if (!firstPath) return;
+  
   const d = firstPath.getAttribute('d');
-  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  const nums = d.match(/-?[\\d.]+/g)?.map(Number);
   if (!nums || nums.length < 8) return;
+  
   const xs = [nums[0], nums[2], nums[4], nums[6]];
   const ys = [nums[1], nums[3], nums[5], nums[7]];
   const x = Math.min(...xs), y = Math.min(...ys);
   const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  
   const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect.setAttribute('x', x); rect.setAttribute('y', y);
-  rect.setAttribute('width', w); rect.setAttribute('height', h);
-  rect.setAttribute('rx', '8');
-  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
-    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  rect.setAttribute('x', x); 
+  rect.setAttribute('y', y);
+  rect.setAttribute('width', w); 
+  rect.setAttribute('height', h);
+  rect.setAttribute('rx', '16'); // Upgraded: softer 16px corners
+  
+  for (const a of ['fill', 'stroke', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) {
+      rect.setAttribute(a, firstPath.getAttribute(a));
+    }
   }
+  
+  // Upgraded: slightly thicker outer table border
+  rect.setAttribute('stroke-width', '2'); 
+  
   firstPath.replaceWith(rect);
-});
-
-document.querySelectorAll('#erd svg.erDiagram .row-rect-odd path, #erd svg.erDiagram .row-rect-even path').forEach(p => {
-  p.setAttribute('stroke', 'none');
 });
 </script>
