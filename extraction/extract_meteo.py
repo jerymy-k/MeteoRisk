@@ -1,23 +1,27 @@
 import logging 
 import pandas as pd 
-import config as cf
 import time 
 import requests
 from extraction.extract_villes import extract_villes
 import os
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+FILE_PATH = PROJECT_ROOT / "extraction" / "extract_meteo.log"
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s' , 
     handlers=[
-        logging.FileHandler('extraction/extract_meteo.log'),
+        logging.FileHandler(FILE_PATH),
         logging.StreamHandler()
     ],
     force=True
 )
 logger = logging.getLogger(__name__)
-apiOpenMeteo = cf.OPEN_METEO_URL
-dailyVars = cf.DAILY_VARS
+apiOpenMeteo = "https://api.open-meteo.com/v1/forecast"
+dailyVars = "temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,windspeed_10m_max,windgusts_10m_max,weathercode"
 def fetch_city(lat , lon , forecast_days = 7 , retries=5 , timeout=10 ):
     params = {
         'latitude': lat,

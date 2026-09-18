@@ -1,11 +1,14 @@
 import logging
 import pandas as pd
+from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+FILE_PATH = PROJECT_ROOT / "extraction" / "extract_villes.log"
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('extraction/extract_villes.log'),
+        logging.FileHandler(FILE_PATH),
         logging.StreamHandler()
     ]
 )
@@ -35,5 +38,6 @@ def extract_villes(csv_path):
     return df
 
 if __name__ == "__main__":
-    df = extract_villes('./bronze/City/MACity.csv')
+    bronze_path = Path(__file__).resolve().parents[1] / "bronze" / "City" / "MACity.csv"
+    df = extract_villes(bronze_path)
     print(df.head())
