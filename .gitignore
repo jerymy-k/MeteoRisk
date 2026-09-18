@@ -17,3 +17,11 @@ bronze/
 
 # uv
 .python-version
+
+# Airflow generated files
+airflow.cfg
+airflow-webserver.pid
+standalone_admin_password.txt
+webserver_config.py
+readme
+logs/
